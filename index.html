@@ -10,7 +10,10 @@
     <div id="app">
         <select id="decklists" aria-placeholder="--- Select a Deck ---">
         </select>
-        <textarea id="decklist-input"></textarea>
+        <div id="editor">
+            <textarea id="decklist-input"></textarea>
+            <button id="submit-decklist" onclick="submit()">Submit</button>
+        </div>
 
     </div>
     <script type="module" src="static/js/index.js"></script>

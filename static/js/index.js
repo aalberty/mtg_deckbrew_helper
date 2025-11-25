@@ -1,3 +1,7 @@
+const submit = function () {
+    console.log("Onclick: submit clicked...");
+}
+
 const placeholder = function () {
     // the individuals scripts from when I made my cedh decklist
     var inventory = []
