@@ -47,7 +47,7 @@ const submit = function () {
     const textarea = document.getElementById("decklist-input");
     const rawInput = textarea.innerText;
     const parsedList = parseDecklist(rawInput);
-    alert("parsed decklist:", parsedList);
+    console.log("parsed decklist:", parsedList);
 }
 
 const submitButton = document.getElementById("submit-decklist");
