@@ -6,3 +6,9 @@
 #decklist-input {
     border: 1px solid white;
 }
+
+#app {
+    display: flex;
+    flex-direction: column;
+    
+}
