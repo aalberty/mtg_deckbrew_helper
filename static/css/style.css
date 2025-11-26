@@ -1,14 +1,51 @@
+:root {
+    --dark-bg: #393737;
+    --dark-bg-light: #666666;
+    --dark-hl: #f3e6e6;
+}
+
 * {
-    background-color: #0d1117;
-    color: #e6edf3;
+    background-color: var(--dark-bg);
+    color: var(--dark-hl);
+}
+
+select, textarea, button {
+    background-color: var(--dark-bg-light);
+}
+
+textarea::placeholder {
+    color: #afafaf;
 }
 
 #decklist-input {
-    border: 1px solid white;
+    border-radius: 5px;
+    width: 50%;
+    height: 30vh;
+    margin: auto;
+    margin-bottom: 1vh;
 }
 
 #app {
     display: flex;
     flex-direction: column;
-    
+    width: 75vw;
+    margin: auto;
+}
+
+#decklists {
+    max-width: 30vw;
+    margin: auto;
+}
+
+#editor {
+    margin-top: 1vh;
+    display: flex;
+    flex-flow: column;
+}
+
+#submit-decklist {
+    border-radius: 5px;
+    max-width: 15vw;
+    min-width: 10%;
+    margin: auto;
 }

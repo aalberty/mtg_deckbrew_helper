@@ -1,5 +1,53 @@
+let decklists = [];
+
+const parseDecklist = (raw) => {
+    let rawLines = raw.split("\n");
+    let decklist = [];
+    rawLines.forEach((line)=>{
+        let count = "";
+        let name = "";
+        let splitLine = line.split(' ');
+
+        if (splitLine.length >= 2) {
+            count = splitLine[0];
+            name = (splitLine.slice(1)).join(' ');
+            decklist.push({'count': count, 'name': name});
+        }
+    });
+    return decklist;
+}
+
+const validateDecklist = (list) => {
+    let response = {'isValid': false, 'message': ""};
+    let cardCount = 0;
+    list.forEach((distinctCard, index)=>{
+        let iCount = 0;
+
+        try {
+            iCount = parseInt(distinctCard.count);
+        } catch (e) {
+            let msg = `validateDecklist -- Error parsing count for card at index ${index}.`;
+            console.warn(msg, list);
+            response.message = msg;
+            return response;
+        }
+
+        cardCount += iCount;
+    });
+
+    if (cardCount != 100) {
+        response.message = `Decklist invalid - incorrect number of cards in library. ${cardCount}/100.`;
+        return response;
+    }
+
+}
+
 const submit = function () {
     console.log("Onclick: submit clicked...");
+    const textarea = document.getElementById("decklist-input");
+    const rawInput = textarea.innerText;
+    const parsedList = parseDecklist(rawInput);
+    alert("parsed decklist:", parsedList);
 }
 
 const submitButton = document.getElementById("submit-decklist");
