@@ -43,9 +43,21 @@ textarea::placeholder {
     flex-flow: column;
 }
 
+#decklist-controls {
+    display: flex;
+    flex-flow: row;
+}
+
+#clear-decklist {
+    margin-left: auto;
+}
+
 #submit-decklist {
+    margin-right: 25%;
+}
+
+button {
     border-radius: 5px;
     max-width: 15vw;
     min-width: 10%;
-    margin: auto;
 }

@@ -40,18 +40,68 @@ const validateDecklist = (list) => {
         return response;
     }
 
+    response.isValid = true;
+    response.message = "OK";
+    return response;
 }
 
-const submit = function () {
-    console.log("Onclick: submit clicked...");
+const displayDecklist = (deckSelected) => {
     const textarea = document.getElementById("decklist-input");
-    const rawInput = textarea.innerText;
+    let index = (deckSelected.srcElement.selectedIndex) - 1; // account for placeholder element in index 0
+    
+    if (index >= decklists.length) {
+        console.warn(`Selected option reports an index that is out-of-bounds for current decklist.\nIndex: ${index}\nDecklists.length: ${decklists.length}`);
+    } else if (index == undefined) {
+        console.warn("Invalid index received from onChange event.");
+    } else {
+        let ppDecklist = "";
+        decklists[index].decklist.forEach((card)=>{
+            ppDecklist += `${card.count} ${card.name}\n`;
+        });
+        textarea.value = ppDecklist;
+    }
+    
+    return;
+}
+
+const addDeckOption = (list) => {
+    let deck = {name: `Deck ${decklists.length+1}`, decklist: list};
+    decklists.push(deck);
+    const deckSelector = document.getElementById("decklists");
+    let opt = document.createElement("option");
+    opt.value = deck.name;
+    opt.innerText = deck.name;
+    deckSelector.appendChild(opt);
+    return;
+}
+
+const submit = () => {
+    const textarea = document.getElementById("decklist-input");
+    const rawInput = textarea.value;
     const parsedList = parseDecklist(rawInput);
     console.log("parsed decklist:", parsedList);
+    let validDeck = validateDecklist(parsedList);
+    console.log("isValid response - ", validDeck);
+    if (validDeck.isValid) {
+        addDeckOption(parsedList);
+    }
+    return;
 }
+
+const clear = () => {
+    const textarea = document.getElementById("decklist-input");
+    textarea.value = "";
+    return;
+}
+
+const deckSelector = document.getElementById("decklists");
+deckSelector.addEventListener("change", displayDecklist);
 
 const submitButton = document.getElementById("submit-decklist");
 submitButton.addEventListener("click", submit);
+
+const clearButton = document.getElementById("clear-decklist");
+clearButton.addEventListener("click", clear);
 
 
 

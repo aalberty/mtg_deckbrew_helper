@@ -8,13 +8,16 @@
 </head>
 <body>
     <div id="app">
-        <select id="decklists">
+        <select id="decklists" onfocus="this.selectedIndex=0">
             <option value="">--- Select a Deck ---</option>
         </select>
         <div id="editor">
             <textarea id="decklist-input"
                 placeholder="Paste decklist here (format as `5 Island` with each distinct card on a new line)"></textarea>
-            <button id="submit-decklist">Submit</button>
+            <div id="decklist-controls">
+                <button type="button" id="clear-decklist">Clear</button>
+                <button type="button" id="submit-decklist">Submit</button>
+            </div>
         </div>
 
     </div>
