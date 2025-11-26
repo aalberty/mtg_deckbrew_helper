@@ -2,6 +2,12 @@ const submit = function () {
     console.log("Onclick: submit clicked...");
 }
 
+const submitButton = document.getElementById("submit-decklist");
+submitButton.addEventListener("click", submit);
+
+
+
+
 const placeholder = function () {
     // the individuals scripts from when I made my cedh decklist
     var inventory = []
