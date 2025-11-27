@@ -8,19 +8,27 @@
 </head>
 <body>
     <div id="app">
-        <select id="decklists" onfocus="this.selectedIndex=0">
-            <option value="">--- Select a Deck ---</option>
-        </select>
-        <div id="editor">
-            <textarea id="decklist-input"
-                placeholder="Paste decklist here (format as `5 Island` with each distinct card on a new line)"></textarea>
-            <div id="decklist-controls">
-                <button type="button" id="clear-decklist">Clear</button>
-                <button type="button" id="submit-decklist">Submit</button>
+        <div id="input-container">
+            <div id="editor">
+                <textarea id="decklist-input"
+                    placeholder="Paste decklist here (format as `5 Island` with each distinct card on a new line)"></textarea>
+                <div id="decklist-controls">
+                    <button type="button" id="clear-decklist">Clear</button>
+                    <button type="button" id="submit-decklist">Submit</button>
+                </div>
             </div>
         </div>
 
+        <div id="analysis-container">
+            <select id="decklists" onfocus="this.selectedIndex=0">
+                <option value="">--- Select a Deck ---</option>
+            </select>
+
+            <span id="decklist-display"></span>
+        </div>
+
     </div>
+    <button type="button" id="run-analysis">Analyze</button>
     <script type="module" src="static/js/index.js"></script>
 </body>
 </html>

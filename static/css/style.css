@@ -23,18 +23,40 @@ textarea::placeholder {
     height: 30vh;
     margin: auto;
     margin-bottom: 1vh;
+    margin-top: 1vh;
 }
 
 #app {
     display: flex;
+    flex-direction: row;
+}
+
+#input-container, #analysis-container {
+    display: flex;
     flex-direction: column;
-    width: 75vw;
+    width: 50%;
+    height: 100%;
     margin: auto;
+}
+
+#decklist-display {
+    margin: auto;
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+    border: 1px solid var(--dark-hl);
+    border-radius: 5px;
+    width: 50%;
+    height: 30vh;
+    overflow-y: scroll;
+    padding: 1vh;
 }
 
 #decklists {
     max-width: 30vw;
+    max-height: 10vh;
     margin: auto;
+    margin-top: 0;
+    flex: auto;
 }
 
 #editor {

@@ -46,7 +46,7 @@ const validateDecklist = (list) => {
 }
 
 const displayDecklist = (deckSelected) => {
-    const textarea = document.getElementById("decklist-input");
+    const decklistDisplay = document.getElementById("decklist-display");
     let index = (deckSelected.srcElement.selectedIndex) - 1; // account for placeholder element in index 0
     
     if (index >= decklists.length) {
@@ -58,7 +58,7 @@ const displayDecklist = (deckSelected) => {
         decklists[index].decklist.forEach((card)=>{
             ppDecklist += `${card.count} ${card.name}\n`;
         });
-        textarea.value = ppDecklist;
+        decklistDisplay.innerText = ppDecklist;
     }
     
     return;
@@ -94,6 +94,80 @@ const clear = () => {
     return;
 }
 
+const analyze = () => {
+    // console.log("analyzing...");
+    // build inventory of cards across all provided decklists in the format
+    // [ {card: "", deck_id: ""}, ... ]
+    var inventory = [];
+    decklists.forEach((deck, index)=>{
+        deck.decklist.forEach((card) => {
+            inventory.push({card: card.name, deck_id: `deck_${index+1}`});
+        });
+    });
+    // console.log("Inventory: ", inventory);
+
+    // find cards common across all provided decks
+    let common = [];
+
+    for (var i = 0; i < inventory.length; i++) {
+        if (i == 0) {
+            // console.log("Sample card from inventory during loop: ", inventory[i].card);
+        }
+
+        if (common.includes(inventory[i].card) || i == inventory.length - 1) {
+            continue;
+        }
+
+        let count = 1;
+        for (var j = (i + 1); j < inventory.length; j++) {
+            if (inventory[j].card == inventory[i].card) {
+                count++;
+            }
+        }
+        if (count >= decklists.length) {
+            common.push(inventory[i].card);
+        } 
+    } 
+
+    // console.log("Common: ", common);
+
+    // find cards that are present in at least one deck, but not all decks;
+    // group by number of decks the card is found in
+
+
+    var distinct = {}
+    var distinct_keys = []
+    for (var i = 0; i < inventory.length; i++) {
+        if (common.includes(inventory[i].card)) { continue }
+
+        if (distinct_keys.includes(inventory[i].card)) {
+            distinct[inventory[i].card].count++
+            distinct[inventory[i].card].decks.push(inventory[i].deck_id)
+        } else {
+            distinct_keys.push(inventory[i].card)
+            distinct[inventory[i].card] = { count: 1, decks: [inventory[i].deck_id] }
+        }
+    }
+
+    let distinct_by_count = [];
+    for (var c = 0; c < decklists.length - 1; c++) {
+        distinct_by_count.push([]);
+    }
+
+    for (var i = 0; i < distinct_keys.length; i++) {
+        distinct_by_count[distinct[distinct_keys[i]].count - 1].push(distinct_keys[i] + '');
+    }
+
+    let results = `Analysis complete!
+Cards common across all provided decklists: ${common.join('\n')}\n`;
+
+    distinct_by_count.forEach((group, index) => {
+        results += `Cards found in ${index+1} of ${decklists.length} decks: ${JSON.stringify(distinct_by_count[index], undefined, 4)}`;
+    });
+
+    console.log(results);
+}
+
 const deckSelector = document.getElementById("decklists");
 deckSelector.addEventListener("change", displayDecklist);
 
@@ -102,6 +176,9 @@ submitButton.addEventListener("click", submit);
 
 const clearButton = document.getElementById("clear-decklist");
 clearButton.addEventListener("click", clear);
+
+const analyzeButton = document.getElementById("run-analysis");
+analyzeButton.addEventListener("click", analyze);
 
 
 
