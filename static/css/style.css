@@ -2,6 +2,8 @@
     --dark-bg: #393737;
     --dark-bg-light: #666666;
     --dark-hl: #f3e6e6;
+    --dark-placeholder: #afafaf;
+    --dark-border: #929292;
 }
 
 * {
@@ -13,73 +15,81 @@ select, textarea, button {
     background-color: var(--dark-bg-light);
 }
 
+button {
+    border-radius: 5px;
+    max-width: 15vw;
+    min-width: 10%;
+}
+
 textarea::placeholder {
-    color: #afafaf;
+    color: var(--dark-placeholder);
+}
+
+#decklists-pane {
+    border: 1px solid var(--dark-border);
+    border-radius: 5px;
+    min-width: 10vw;
+    display: flex;
+    flex-flow: column;
 }
 
 #decklist-input {
     border-radius: 5px;
     width: 50%;
     height: 30vh;
-    margin: auto;
-    margin-bottom: 1vh;
-    margin-top: 1vh;
+    margin-right: auto;
 }
 
 #app {
     display: flex;
-    flex-direction: row;
-}
-
-#input-container, #analysis-container {
-    display: flex;
     flex-direction: column;
-    width: 50%;
-    height: 100%;
-    margin: auto;
+    padding-top: 5vh;
+    padding-left: 1vw;
+    margin-right: auto;
 }
 
-#decklist-display {
-    margin: auto;
+#panes-container {
+    display: flex;
+    flex-direction: row;
     margin-bottom: 1vh;
-    margin-top: 1vh;
-    border: 1px solid var(--dark-hl);
-    border-radius: 5px;
-    width: 50%;
-    height: 30vh;
-    overflow-y: scroll;
-    padding: 1vh;
 }
 
-#decklists {
-    max-width: 30vw;
-    max-height: 10vh;
+#controls-container {
+    display: flex;
+    flex-direction: row;
     margin: auto;
-    margin-top: 0;
-    flex: auto;
 }
 
-#editor {
-    margin-top: 1vh;
+#controls-container > button {
+    margin-right: auto;
+    margin-left: 10px;
+}
+
+#pane-title {
+    margin: auto;
+    margin-top: 2px;
+    margin-bottom: 0;
+}
+
+table {
+    padding-top: 1vh;
+}
+
+td {
+    margin: auto;
+}
+
+tr {
     display: flex;
-    flex-flow: column;
 }
 
-#decklist-controls {
-    display: flex;
-    flex-flow: row;
-}
 
-#clear-decklist {
+#create-new {
+    min-width: 5vw;
     margin-left: auto;
+    margin-right: auto;
+    margin-top: 1vh;
+    margin-bottom: 0;
 }
 
-#submit-decklist {
-    margin-right: 25%;
-}
-
-button {
-    border-radius: 5px;
-    max-width: 15vw;
-    min-width: 10%;
-}
+    

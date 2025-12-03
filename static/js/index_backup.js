@@ -168,53 +168,18 @@ Cards common across all provided decklists: ${common.join('\n')}\n`;
     console.log(results);
 }
 
-const addDeck = (event) => {
-    console.log("Event details: ", event);
-    let deckName = "";
-    if (event.type == "change" || (event.type == "keydown" && event.key == "Enter")) {
-        const userInput = document.getElementById("new-deck-input");
-        let proposedName = (userInput.value).split("");
-        if (proposedName.length > 1) {
-            if (proposedName[proposedName.length-1] == "\n") {
-                proposedName.pop();
-                // change to a span, and fill with deck name
-                // make sure to have an onclick for showing deck in main textarea
-            }
-        }
-    } else {
-        alert("Deck names should be more than one character long.");
-        // clear the input and let them try again
-    }
-}
+const deckSelector = document.getElementById("decklists");
+deckSelector.addEventListener("change", displayDecklist);
 
-const askForDeckName = () => {
-    const decklistTable = document.getElementById("decklists");
-    let newDeck = document.createElement("tr");
-    let contents = document.createElement("td");
-    let userInput = document.createElement("textarea");
-    userInput.id = "new-deck-input";
-    userInput.addEventListener("change", addDeck);
-    userInput.addEventListener("keydown", addDeck);
-    contents.appendChild(userInput);
-    newDeck.appendChild(contents);
-    decklistTable.appendChild(newDeck);
-    return;
-}
+const submitButton = document.getElementById("submit-decklist");
+submitButton.addEventListener("click", submit);
 
-// const deckSelector = document.getElementById("decklists");
-// deckSelector.addEventListener("change", displayDecklist);
+const clearButton = document.getElementById("clear-decklist");
+clearButton.addEventListener("click", clear);
 
-// const submitButton = document.getElementById("submit-decklist");
-// submitButton.addEventListener("click", submit);
+const analyzeButton = document.getElementById("run-analysis");
+analyzeButton.addEventListener("click", analyze);
 
-// const clearButton = document.getElementById("clear-decklist");
-// clearButton.addEventListener("click", clear);
-
-// const analyzeButton = document.getElementById("run-analysis");
-// analyzeButton.addEventListener("click", analyze);
-
-const newDeckButton = document.getElementById("create-new");
-newDeckButton.addEventListener("click", askForDeckName);
 
 
 

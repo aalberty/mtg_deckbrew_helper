@@ -1,34 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Single Page App</title>
     <link rel="stylesheet" href="static/css/style.css">
 </head>
+
 <body>
     <div id="app">
-        <div id="input-container">
-            <div id="editor">
-                <textarea id="decklist-input"
-                    placeholder="Paste decklist here (format as `5 Island` with each distinct card on a new line)"></textarea>
-                <div id="decklist-controls">
-                    <button type="button" id="clear-decklist">Clear</button>
-                    <button type="button" id="submit-decklist">Submit</button>
-                </div>
-            </div>
+        <div id="panes-container">
+            <span id="decklists-pane">
+                <span id="pane-title">Deck Inventory</span>
+                <button type="button" id="create-new">New</button>
+                <table id="decklists">
+                </table>
+            </span>
+            <textarea id="decklist-input"
+                placeholder="Paste decklist here (format as `5 Island` with each distinct card on a new line)"></textarea>
         </div>
 
-        <div id="analysis-container">
-            <select id="decklists" onfocus="this.selectedIndex=0">
-                <option value="">--- Select a Deck ---</option>
-            </select>
-
-            <span id="decklist-display"></span>
+        <div id="controls-container">
+            <button type="button" id="save-decklist">Save</button>
+            <button type="button" id="run-analysis">Analyze Selected Decklists</button>
         </div>
-
     </div>
-    <button type="button" id="run-analysis">Analyze</button>
     <script type="module" src="static/js/index.js"></script>
 </body>
+
 </html>
