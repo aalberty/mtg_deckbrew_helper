@@ -46,7 +46,7 @@ const validateDecklist = (list) => {
 }
 
 const displayDecklist = (deckSelected) => {
-    const decklistDisplay = document.getElementById("decklist-display");
+    const decklistDisplay = document.getElementById("decklist-input");
     let index = (deckSelected.srcElement.selectedIndex) - 1; // account for placeholder element in index 0
     
     if (index >= decklists.length) {
@@ -169,21 +169,31 @@ Cards common across all provided decklists: ${common.join('\n')}\n`;
 }
 
 const addDeck = (event) => {
-    console.log("Event details: ", event);
-    let deckName = "";
-    if (event.type == "change" || (event.type == "keydown" && event.key == "Enter")) {
+    // console.log("Event details: ", event);
+    if (event.type == "change" || (event.type == "keyup" && event.key == "Enter")) {
         const userInput = document.getElementById("new-deck-input");
         let proposedName = (userInput.value).split("");
         if (proposedName.length > 1) {
-            if (proposedName[proposedName.length-1] == "\n") {
+            if (proposedName[proposedName.length - 1] == "\n") {
                 proposedName.pop();
-                // change to a span, and fill with deck name
-                // make sure to have an onclick for showing deck in main textarea
+                const parentTd = userInput.parentElement;
+                userInput.remove();
+                let namedDeck = document.createElement("span");
+                namedDeck.innerText = proposedName.join("");
+                // update the callback to get the deck name via source element attrb,
+                // and then console log the decklist associated with it
+                namedDeck.addEventListener("click", () => { console.log(proposedName.join("")) });
+                parentTd.appendChild(namedDeck);
+                const textarea = document.getElementById("decklist-input");
+                let decklist = parseDecklist(textarea.value);
+                decklists.push({"name": namedDeck.innerText, "decklist": decklist});
             }
+        } else {
+            alert("Deck names should be more than one character long.");
+            // clear the input and let them try again
+            userInput.value = "";
         }
-    } else {
-        alert("Deck names should be more than one character long.");
-        // clear the input and let them try again
+
     }
 }
 
@@ -194,7 +204,7 @@ const askForDeckName = () => {
     let userInput = document.createElement("textarea");
     userInput.id = "new-deck-input";
     userInput.addEventListener("change", addDeck);
-    userInput.addEventListener("keydown", addDeck);
+    userInput.addEventListener("keyup", addDeck);
     contents.appendChild(userInput);
     newDeck.appendChild(contents);
     decklistTable.appendChild(newDeck);
@@ -215,6 +225,9 @@ const askForDeckName = () => {
 
 const newDeckButton = document.getElementById("create-new");
 newDeckButton.addEventListener("click", askForDeckName);
+
+const showDecks = document.getElementById("show-decklists");
+showDecks.addEventListener("click", ()=>{console.log(decklists)})
 
 
 
