@@ -274,6 +274,12 @@ const askForDeckName = () => {
     return;
 }
 
+const clearOutput = () => {
+    output.innerText = "";
+    outputContent = "";
+    return;
+}
+
 const analyzeButton = document.getElementById("run-analysis");
 analyzeButton.addEventListener("click", analyze);
 
@@ -281,4 +287,7 @@ const newDeckButton = document.getElementById("create-new");
 newDeckButton.addEventListener("click", askForDeckName);
 
 const showDecks = document.getElementById("show-decklists");
-showDecks.addEventListener("click", ()=>{logOutput(decklists)});
+showDecks.addEventListener("click", ()=>{logOutput(JSON.stringify(decklists, undefined, 4))});
+
+const clearButton = document.getElementById("clear-output");
+clearButton.addEventListener("click", clearOutput);
