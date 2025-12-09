@@ -1,4 +1,17 @@
 let decklists = [];
+const output = document.getElementById("output");
+var outputContent = "";
+
+const logOutput = (msg) => {
+    var alwaysClear = document.getElementById("always-clear-output");
+    if (alwaysClear.checked) {
+        outputContent = msg;
+    } else {
+        outputContent = msg + "\n\n---------------\n\n" + outputContent; 
+    }
+    output.innerText = outputContent;
+    return;
+}
 
 const parseDecklist = (raw) => {
     let rawLines = raw.split("\n");
@@ -45,6 +58,7 @@ const validateDecklist = (list) => {
     return response;
 }
 
+// Remove?
 const displayDecklist = (deckSelected) => {
     const decklistDisplay = document.getElementById("decklist-input");
     let index = (deckSelected.srcElement.selectedIndex) - 1; // account for placeholder element in index 0
@@ -64,6 +78,7 @@ const displayDecklist = (deckSelected) => {
     return;
 }
 
+// Remove?
 const addDeckOption = (list) => {
     let deck = {name: `Deck ${decklists.length+1}`, decklist: list};
     decklists.push(deck);
@@ -75,6 +90,7 @@ const addDeckOption = (list) => {
     return;
 }
 
+// Remove?
 const submit = () => {
     const textarea = document.getElementById("decklist-input");
     const rawInput = textarea.value;
@@ -88,23 +104,67 @@ const submit = () => {
     return;
 }
 
+// Remove?
 const clear = () => {
     const textarea = document.getElementById("decklist-input");
     textarea.value = "";
     return;
 }
 
+const getTargetDecks = () => {
+    let allDecks = document.getElementById("decklists");
+    let targetDecks = [];
+
+    for (var i = 0; i < allDecks.children.length; i++) {
+        //tr
+        if (allDecks.children[i].children.length > 0) {
+            //td
+            if (allDecks.children[i].children[0] && allDecks.children[i].children[0].children.length >= 2) {
+                //[0] is checkbox, [1] is span w/ deckname as innerText
+                if (allDecks.children[i].children[0].children[0].checked) {
+                    var name = allDecks.children[i].children[0].children[1].innerText;
+                    decklists.forEach((deck) => {
+                        if (deck.name == name) {
+                            targetDecks.push(deck);
+                            return;
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    return targetDecks;
+}
+
 const analyze = () => {
-    // console.log("analyzing...");
-    // build inventory of cards across all provided decklists in the format
-    // [ {card: "", deck_id: ""}, ... ]
+    let targetDecks = getTargetDecks();
+
+    if (targetDecks.length < 2) {
+        // console.warn("Must select more than one deck in order to get useful analysis.");
+        logOutput("WARNING: Must select more than one deck in order to get useful analysis.");
+
+        return;
+    }
+
     var inventory = [];
-    decklists.forEach((deck, index)=>{
+
+    let startMsg = ""; 
+    let targetDeckNames = [];
+    targetDecks.forEach((deck) => {
+        targetDeckNames.push(deck.name);
+    });
+
+    startMsg = "Analyzing decks: ";
+    startMsg += targetDeckNames.join(",");
+
+
+
+    targetDecks.forEach((deck, index)=>{
         deck.decklist.forEach((card) => {
             inventory.push({card: card.name, deck_id: `deck_${index+1}`});
         });
     });
-    // console.log("Inventory: ", inventory);
 
     // find cards common across all provided decks
     let common = [];
@@ -124,12 +184,10 @@ const analyze = () => {
                 count++;
             }
         }
-        if (count >= decklists.length) {
+        if (count >= targetDecks.length) {
             common.push(inventory[i].card);
         } 
     } 
-
-    // console.log("Common: ", common);
 
     // find cards that are present in at least one deck, but not all decks;
     // group by number of decks the card is found in
@@ -150,7 +208,7 @@ const analyze = () => {
     }
 
     let distinct_by_count = [];
-    for (var c = 0; c < decklists.length - 1; c++) {
+    for (var c = 0; c < targetDecks.length - 1; c++) {
         distinct_by_count.push([]);
     }
 
@@ -158,14 +216,15 @@ const analyze = () => {
         distinct_by_count[distinct[distinct_keys[i]].count - 1].push(distinct_keys[i] + '');
     }
 
-    let results = `Analysis complete!
-Cards common across all provided decklists: ${common.join('\n')}\n`;
+    let results = `${startMsg}\n\nAnalysis complete!\n
+Cards common across all provided decklists: \n${JSON.stringify(common, undefined, 4)}\n\n`;
 
     distinct_by_count.forEach((group, index) => {
-        results += `Cards found in ${index+1} of ${decklists.length} decks: ${JSON.stringify(distinct_by_count[index], undefined, 4)}`;
+        results += `Cards found in ${index+1} of ${targetDecks.length} decks: \n${JSON.stringify(distinct_by_count[index], undefined, 4)}`;
     });
 
-    console.log(results);
+    // console.log(results);
+    logOutput(results);
 }
 
 const addDeck = (event) => {
@@ -183,6 +242,9 @@ const addDeck = (event) => {
                 // update the callback to get the deck name via source element attrb,
                 // and then console log the decklist associated with it
                 namedDeck.addEventListener("click", () => { console.log(proposedName.join("")) });
+                let checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                parentTd.appendChild(checkbox);
                 parentTd.appendChild(namedDeck);
                 const textarea = document.getElementById("decklist-input");
                 let decklist = parseDecklist(textarea.value);
@@ -208,75 +270,15 @@ const askForDeckName = () => {
     contents.appendChild(userInput);
     newDeck.appendChild(contents);
     decklistTable.appendChild(newDeck);
+    userInput.focus();
     return;
 }
 
-// const deckSelector = document.getElementById("decklists");
-// deckSelector.addEventListener("change", displayDecklist);
-
-// const submitButton = document.getElementById("submit-decklist");
-// submitButton.addEventListener("click", submit);
-
-// const clearButton = document.getElementById("clear-decklist");
-// clearButton.addEventListener("click", clear);
-
-// const analyzeButton = document.getElementById("run-analysis");
-// analyzeButton.addEventListener("click", analyze);
+const analyzeButton = document.getElementById("run-analysis");
+analyzeButton.addEventListener("click", analyze);
 
 const newDeckButton = document.getElementById("create-new");
 newDeckButton.addEventListener("click", askForDeckName);
 
 const showDecks = document.getElementById("show-decklists");
-showDecks.addEventListener("click", ()=>{console.log(decklists)})
-
-
-
-const placeholder = function () {
-    // the individuals scripts from when I made my cedh decklist
-    var inventory = []
-    for (var i = 0; i < decks.length; i++) {
-        for (var j = 0; j < decklists[decks[i]].length; j++) {
-            inventory.push({
-                card: decklists[decks[i]][j],
-                deck_id: 'deck' + (i + 1).toString()
-            })
-        }
-    }
-
-    var common = []
-    for (var i = 0; i < inventory.length; i++) {
-        if (common.includes(inventory[i].card) || i == inventory.length - 1) {
-            continue;
-        }
-        var count = 1
-        for (var j = (i + 1); j < inventory.length; j++) {
-            if (inventory[j].card == inventory[i].card) {
-                count++;
-            }
-        }
-        if (count >= 5) {
-            common.push(inventory[i].card)
-        }
-    }
-
-    var distinct = {}
-    var distinct_keys = []
-    for (var i = 0; i < inventory.length; i++) {
-        if (common.includes(inventory[i].card)) { continue }
-
-        if (distinct_keys.includes(inventory[i].card)) {
-            distinct[inventory[i].card].count++
-            distinct[inventory[i].card].decks.push(inventory[i].deck_id)
-        } else {
-            distinct_keys.push(inventory[i].card)
-            distinct[inventory[i].card] = { count: 1, decks: [inventory[i].deck_id] }
-        }
-    }
-
-    distinct_by_count = [[], [], [], []]
-    for (var i = 0; i < distinct_keys.length; i++) {
-        distinct_by_count[distinct[distinct_keys[i]].count - 1].push(distinct_keys[i] + '')
-    }
-
-
-}
+showDecks.addEventListener("click", ()=>{logOutput(decklists)});

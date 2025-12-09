@@ -22,9 +22,17 @@
         </div>
 
         <div id="controls-container">
-            <button type="button" id="save-decklist">Save</button>
+            <div id="always-clear-container">
+                <input type="checkbox" id="always-clear-output">
+                <label for="always-clear-output">Always clear output</label>
+            </div>
+            <button type="button" id="clear-output">Clear Output</button>
             <button type="button" id="run-analysis">Analyze Selected Decklists</button>
             <button type="button" id="show-decklists">Log Decklists</button>
+        </div>
+    
+        <div id="output-container">
+            <span id="output"></span>
         </div>
     </div>
     <script type="module" src="static/js/index.js"></script>
