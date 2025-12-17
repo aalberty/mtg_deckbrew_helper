@@ -314,6 +314,13 @@ clearButton.addEventListener("click", clearOutput);
 const closeModalButton = document.getElementById("close-modal");
 closeModalButton.addEventListener("click", closeModal);
 
+document.addEventListener("keydown", (e) => {
+    if (modalBackdrop.classList.contains("is-visible"))
+        console.log(e);
+    else
+        console.log("modal hidden currently.");
+});
+
 const testModalButton = document.getElementById("test-modal");
 testModalButton.addEventListener("click", openModal);
 

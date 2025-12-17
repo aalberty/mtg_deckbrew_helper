@@ -165,11 +165,12 @@ tr {
     background-color: var(--dark-bg);
     padding: 1rem 1.5rem;
     border-radius: 5px;
-    max-width: 300px;
+    max-width: 50vw;
     width: 100%;
 
     display: none;
     z-index: 1;
+    border: 1px solid var(--dark-border);
 }
 
 .modal-backdrop.is-visible {
@@ -199,4 +200,13 @@ tr {
 
 #modal-controls-container > button {
     min-width: 5vw;
+}
+
+#modal-decklist-input {
+    width: 100%;
+    min-height: 10vh;
+    border-radius: 5px;
+    margin: auto;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
 }
