@@ -280,6 +280,11 @@ const clearOutput = () => {
     return;
 }
 
+const closeModal = () => {
+    const newDeckModal = document.getElementById("new-deck-modal");
+    newDeckModal.classList.remove("is-visible");
+}
+
 const analyzeButton = document.getElementById("run-analysis");
 analyzeButton.addEventListener("click", analyze);
 
@@ -291,3 +296,6 @@ showDecks.addEventListener("click", ()=>{logOutput(JSON.stringify(decklists, und
 
 const clearButton = document.getElementById("clear-output");
 clearButton.addEventListener("click", clearOutput);
+
+const closeModalButton = document.getElementById("close-modal");
+closeModalButton.addEventListener("click", closeModal);

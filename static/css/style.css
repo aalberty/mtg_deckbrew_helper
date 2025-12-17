@@ -139,3 +139,16 @@ tr {
     min-height: 10vh;
     max-height: 50vh;
 }
+
+.modal {
+    background-color: var(--dark-bg-light);
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    max-width: 300px;
+    width: 100%;
+    display: none;
+}
+
+.is-visible {
+    display: flex;
+}
