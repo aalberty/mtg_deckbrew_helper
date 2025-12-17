@@ -140,15 +140,63 @@ tr {
     max-height: 50vh;
 }
 
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 1000;
+}
+
+.modal-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--dark-bg-light);
+    opacity: 0.2;
+    z-index: 0;
+}
+
 .modal {
-    background-color: var(--dark-bg-light);
+    position: relative;
+    background-color: var(--dark-bg);
     padding: 1rem 1.5rem;
     border-radius: 5px;
     max-width: 300px;
     width: 100%;
+
     display: none;
+    z-index: 1;
 }
 
-.is-visible {
+.modal-backdrop.is-visible {
     display: flex;
+}
+
+.modal.is-visible {
+    display: flex;
+    flex-flow: column;
+}
+
+#deck-name-container {
+    margin-bottom: 1vh;
+}
+
+#deck-name-input {
+    border: 1px solid var(--dark-border);
+    border-radius: 5px;
+}
+
+#modal-controls-container {
+    display: flex;
+    flex-flow: row;
+    justify-content: end;
+    align-items: center;
+}
+
+#modal-controls-container > button {
+    min-width: 5vw;
 }

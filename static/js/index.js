@@ -281,9 +281,23 @@ const clearOutput = () => {
 }
 
 const closeModal = () => {
+    const modalBackdrop = document.getElementById("modal-backdrop");
     const newDeckModal = document.getElementById("new-deck-modal");
     newDeckModal.classList.remove("is-visible");
+    modalBackdrop.classList.remove("is-visible");
 }
+
+const openModal = () => {
+    const modalBackdrop = document.getElementById("modal-backdrop");
+    const newDeckModal = document.getElementById("new-deck-modal");
+    modalBackdrop.classList.add("is-visible");
+    newDeckModal.classList.add("is-visible");
+}
+
+const modalTemplate = document.getElementById("modal-template");
+const modalBackdrop = document.getElementById("modal-backdrop");
+const modal = modalTemplate.content.cloneNode(true);
+modalBackdrop.appendChild(modal);
 
 const analyzeButton = document.getElementById("run-analysis");
 analyzeButton.addEventListener("click", analyze);
@@ -299,3 +313,8 @@ clearButton.addEventListener("click", clearOutput);
 
 const closeModalButton = document.getElementById("close-modal");
 closeModalButton.addEventListener("click", closeModal);
+
+const testModalButton = document.getElementById("test-modal");
+testModalButton.addEventListener("click", openModal);
+
+

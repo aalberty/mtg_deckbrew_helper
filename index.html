@@ -10,11 +10,7 @@
 
 <body>
     <div id="app">
-        <div id="new-deck-modal" class="modal">
-            <p>This is a modal.</p>
-            <button type="button" id="close-modal">Close</button>
-        </div>
-
+        <div id="modal-backdrop" class="modal-backdrop"></div>
         <div id="panes-container">
             <span id="decklists-pane">
                 <span id="pane-title">Deck Inventory</span>
@@ -27,6 +23,7 @@
         </div>
 
         <div id="controls-container">
+            <button type="button" id="test-modal">Open Modal</button>
             <div id="always-clear-container">
                 <input type="checkbox" id="always-clear-output">
                 <label for="always-clear-output">Always clear output</label>
@@ -44,3 +41,19 @@
 </body>
 
 </html>
+
+<template id="modal-template">
+        
+            <div id="new-deck-modal" class="modal">
+                <p>This is a modal.</p>
+                <div id="deck-name-container">
+                    <label for="deck-name-input">Name: </label>
+                    <input type="text" id="deck-name-input">
+                </div>
+                <div id="modal-controls-container">
+                    <button type="button" id="close-modal">Close</button>
+                    <button type="button" id="save-new-deck">Save</button>
+                </div>
+            </div>
+        
+</template>
