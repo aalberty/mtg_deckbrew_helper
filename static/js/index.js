@@ -262,6 +262,7 @@ const addDeck = (event) => {
 
 // TODO: `rewire` to the modal experience
 const askForDeckName = () => {
+    // TODO: update the element ids to point to pieces of the modal
     const decklistTable = document.getElementById("decklists");
     let newDeck = document.createElement("tr");
     let contents = document.createElement("td");
