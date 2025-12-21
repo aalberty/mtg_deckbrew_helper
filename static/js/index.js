@@ -1,4 +1,13 @@
 let decklists = [];
+/**
+ * [
+ *  {
+ *      "name": <deck_title>,
+ *      "decklist": []
+ *  },
+ * ]
+ */
+
 const output = document.getElementById("output");
 var outputContent = "";
 
@@ -57,60 +66,6 @@ const validateDecklist = (list) => {
     response.message = "OK";
     return response;
 }
-/*
-// Remove?
-const displayDecklist = (deckSelected) => {
-    const decklistDisplay = document.getElementById("decklist-input");
-    let index = (deckSelected.srcElement.selectedIndex) - 1; // account for placeholder element in index 0
-    
-    if (index >= decklists.length) {
-        console.warn(`Selected option reports an index that is out-of-bounds for current decklist.\nIndex: ${index}\nDecklists.length: ${decklists.length}`);
-    } else if (index == undefined) {
-        console.warn("Invalid index received from onChange event.");
-    } else {
-        let ppDecklist = "";
-        decklists[index].decklist.forEach((card)=>{
-            ppDecklist += `${card.count} ${card.name}\n`;
-        });
-        decklistDisplay.innerText = ppDecklist;
-    }
-    
-    return;
-}
-
-// Remove?
-const addDeckOption = (list) => {
-    let deck = {name: `Deck ${decklists.length+1}`, decklist: list};
-    decklists.push(deck);
-    const deckSelector = document.getElementById("decklists");
-    let opt = document.createElement("option");
-    opt.value = deck.name;
-    opt.innerText = deck.name;
-    deckSelector.appendChild(opt);
-    return;
-}
-
-// Remove?
-const submit = () => {
-    const textarea = document.getElementById("decklist-input");
-    const rawInput = textarea.value;
-    const parsedList = parseDecklist(rawInput);
-    console.log("parsed decklist:", parsedList);
-    let validDeck = validateDecklist(parsedList);
-    console.log("isValid response - ", validDeck);
-    if (validDeck.isValid) {
-        addDeckOption(parsedList);
-    }
-    return;
-}
-
-// Remove?
-const clear = () => {
-    const textarea = document.getElementById("decklist-input");
-    textarea.value = "";
-    return;
-}
-*/
 
 const getTargetDecks = () => {
     let allDecks = document.getElementById("decklists");
@@ -228,53 +183,130 @@ Cards common across all provided decklists: \n${JSON.stringify(common, undefined
     logOutput(results);
 }
 
-const addDeck = (event) => {
-    // console.log("Event details: ", event);
-    if (event.type == "change" || (event.type == "keyup" && event.key == "Enter")) {
-        const userInput = document.getElementById("new-deck-input");
-        let proposedName = (userInput.value).split("");
-        if (proposedName.length > 1) {
-            if (proposedName[proposedName.length - 1] == "\n") {
-                proposedName.pop();
-                const parentTd = userInput.parentElement;
-                userInput.remove();
-                let namedDeck = document.createElement("span");
-                namedDeck.innerText = proposedName.join("");
-                // update the callback to get the deck name via source element attrb,
-                // and then console log the decklist associated with it
-                namedDeck.addEventListener("click", () => { console.log(proposedName.join("")) });
-                let checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                parentTd.appendChild(checkbox);
-                parentTd.appendChild(namedDeck);
-                const textarea = document.getElementById("decklist-input");
-                let decklist = parseDecklist(textarea.value);
-                decklists.push({"name": namedDeck.innerText, "decklist": decklist});
-            }
-        } else {
-            alert("Deck names should be more than one character long.");
-            // clear the input and let them try again
-            userInput.value = "";
-        }
-
-    }
+const saveDeck = (name, decklist) => {
+    decklists.push({
+        "name": name,
+        "decklist": decklist
+    });
+    return;
 }
 
-// TODO: `rewire` to the modal experience
-const askForDeckName = () => {
-    // TODO: update the element ids to point to pieces of the modal
+
+const getModalElements = () => {
+    let modalElements = {};
+    modalElements['title'] = document.getElementById("deck-name-input");
+    modalElements['decklist'] = document.getElementById("modal-decklist-input");
+    return modalElements;
+}
+
+const getSavedDeckTitles = () => {
+    let deckTitles = [];
+    
+    decklists.forEach((deck)=>{
+        deckTitles.push(deck['name']);
+    });
+
+    return deckTitles;
+}
+
+const getDecklistsInDOM = () => {
+    let deckNames = [];
+    const decksTable = document.getElementById("decklists");
+    for (var i = 0; i < allDecks.children.length; i++) {
+        //tr
+        if (allDecks.children[i].children.length > 0) {
+            //td
+            if (allDecks.children[i].children[0] && allDecks.children[i].children[0].children.length >= 2) {
+                //[0] is checkbox, [1] is span w/ deckname as innerText
+                var name = allDecks.children[i].children[0].children[1].innerText;
+                deckNames.push(name);
+            }
+        }
+    }
+
+    return deckNames;
+}
+
+
+const addDeckToView = (name) => {
+    let newRow = document.createElement("tr");
+    let newData = document.createElement("td");
+    let newDeck = document.createElement("span");
+    newDeck.innerText = name;
+    let checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    newData.appendChild(checkbox);
+    newData.appendChild(newDeck);
+    newRow.appendChild(newData);
+
     const decklistTable = document.getElementById("decklists");
-    let newDeck = document.createElement("tr");
-    let contents = document.createElement("td");
-    let userInput = document.createElement("textarea");
-    userInput.id = "new-deck-input";
-    userInput.addEventListener("change", addDeck);
-    userInput.addEventListener("keyup", addDeck);
-    contents.appendChild(userInput);
-    newDeck.appendChild(contents);
-    decklistTable.appendChild(newDeck);
-    userInput.focus();
+    decklistTable.append(newRow);
     return;
+}
+
+const getDecklistForName = (name) => {
+    decklists.forEach((deck) => {
+        if (deck.name == name) {
+            return deck.decklist;
+        }
+    });
+
+    return false;
+}
+
+
+const updateDecklistTable = () => {
+    /**
+     * to be called after updating the `decklists` runtime variable;
+     * checks for changes to the state of `decklists`, and updates the UI
+     * to reflect any changes found
+     */
+
+    // get View repr of decklists
+    let decklistView = getDecklistsInDOM();
+    let decklistState = getSavedDeckTitles();
+
+    decklistState.forEach((deck)=>{
+        if (!decklistView.includes(deck)) {
+            addDeckToView(deck, decklists)
+        }
+    });
+}
+
+
+
+const submitDeck = () => {
+    let result = {
+        "status": "",
+        "code": 0,
+        "message": ""
+    };
+
+    // validate deck title non-empty, and not duplicate
+    let modalElements = getModalElements();
+    const deckTitles = getSavedDeckTitles();
+    let newDeckTitle = modalElements["title"].innerText;
+    if (newDeckTitle == "") {
+        result.status = "fail";
+        result.code = 1;
+        result.message = "Empty name is not supported for decklists. Please provide a name for the decklist.";
+    }
+
+
+    let newDecklist = parseDecklist(modalElements["decklist"]);
+
+    if (!deckTitles.includes(newDeckTitle)) {
+        // add the new deck to the runtime list
+        saveDeck(newDeckTitle, newDecklist);
+        closeModal();
+        result.status = "success";
+    } else {
+        result.status = "fail";
+        result.code = 2;
+        result.message = `${newDeckTitle} conflicts with another deck in saved decklists. Please use unique deck names.`;
+    }
+
+    return result;
 }
 
 const clearOutput = () => {
@@ -305,9 +337,8 @@ modalBackdrop.appendChild(modal);
 const analyzeButton = document.getElementById("run-analysis");
 analyzeButton.addEventListener("click", analyze);
 
-// TODO: rewire; attach `openModal` here
 const newDeckButton = document.getElementById("create-new");
-newDeckButton.addEventListener("click", askForDeckName);
+newDeckButton.addEventListener("click", openModal);
 
 const showDecks = document.getElementById("show-decklists");
 showDecks.addEventListener("click", ()=>{logOutput(JSON.stringify(decklists, undefined, 4))});
@@ -318,6 +349,21 @@ clearButton.addEventListener("click", clearOutput);
 const closeModalButton = document.getElementById("close-modal");
 closeModalButton.addEventListener("click", closeModal);
 
+/**
+ * TODO: `rewire`; save button on the modal should:
+ * 
+ * - check required fields are filled (deck name, decklist)
+ * - check the name isn't a duplicate
+ * - basic validation of the decklist (100 cards)
+ * - add decklist to runtime datastructure
+ * - 
+ */
+
+
+// TODO: `escape (esc) to close support`; retain until you decide if you want this to be part of the UX or not.
+// nice to have, but worried that habitually hitting esc will cause data loss.
+// If you're going to leave this in, make sure to implement an "are you sure" if
+// fields have been changed on the modal. (Double esc insta-closes)
 /*
 // close modal with esc key
 document.addEventListener("keydown", (e) => {
@@ -330,8 +376,4 @@ document.addEventListener("keydown", (e) => {
         console.log("modal hidden currently.");
 });
 */
-// TODO: unwire; removing the button
-const testModalButton = document.getElementById("test-modal");
-testModalButton.addEventListener("click", openModal);
-
 

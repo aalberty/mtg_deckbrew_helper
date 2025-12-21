@@ -1,7 +1,8 @@
 # backlog
-- [ ] Make the "new deck" feature on the mtg brew assist a modal experience
-- [ ] The text area should get swapped to a span
-- [ ] add an `edit` button that changes the span to a text area in case the list needs to get modified by one card or something
-- [ ] Add a "remove deck" feature; `X` marks to the right of each deck?
 
+## functionality
+- [ ] `edit` button: open the modal experience again, but with a save button instead of a submit (doesn't add a new decklist, modifies the one that you opened)
+- [ ] "remove deck": button that's greyed out unless you have decks selected. confirm before delete
+
+## ui
 - [ ] figure out what's going on with opacity on the ::before element for the modal-backdrop

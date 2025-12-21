@@ -14,18 +14,18 @@
         <div id="panes-container">
             <span id="decklists-pane">
                 <span id="pane-title">Deck Inventory</span>
-                <!-- TODO: rewire; onclick="openModal"-->
                 <button type="button" id="create-new">New</button>
                 <table id="decklists">
                 </table>
             </span>
-            <textarea id="decklist-input"
-                placeholder="Paste decklist here (format as `5 Island` with each distinct card on a new line)"></textarea>
+
+            <div id="output-container">
+                <span id="output"></span>
+            </div>
+
         </div>
 
         <div id="controls-container">
-            <!-- TODO: rewire; remove this button -->
-            <button type="button" id="test-modal">Open Modal</button>
             <div id="always-clear-container">
                 <input type="checkbox" id="always-clear-output">
                 <label for="always-clear-output">Always clear output</label>
@@ -35,9 +35,6 @@
             <button type="button" id="show-decklists">Log Decklists</button>
         </div>
     
-        <div id="output-container">
-            <span id="output"></span>
-        </div>
     </div>
     <script type="module" src="static/js/index.js"></script>
 </body>
@@ -45,7 +42,6 @@
 </html>
 
 
-<!-- TODO: rewire index.js to use template elements -->
 <template id="modal-template">
         
             <div id="new-deck-modal" class="modal">
