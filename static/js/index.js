@@ -57,7 +57,7 @@ const validateDecklist = (list) => {
     response.message = "OK";
     return response;
 }
-
+/*
 // Remove?
 const displayDecklist = (deckSelected) => {
     const decklistDisplay = document.getElementById("decklist-input");
@@ -110,6 +110,7 @@ const clear = () => {
     textarea.value = "";
     return;
 }
+*/
 
 const getTargetDecks = () => {
     let allDecks = document.getElementById("decklists");
@@ -259,6 +260,7 @@ const addDeck = (event) => {
     }
 }
 
+// TODO: `rewire` to the modal experience
 const askForDeckName = () => {
     const decklistTable = document.getElementById("decklists");
     let newDeck = document.createElement("tr");
@@ -302,6 +304,7 @@ modalBackdrop.appendChild(modal);
 const analyzeButton = document.getElementById("run-analysis");
 analyzeButton.addEventListener("click", analyze);
 
+// TODO: rewire; attach `openModal` here
 const newDeckButton = document.getElementById("create-new");
 newDeckButton.addEventListener("click", askForDeckName);
 
@@ -314,13 +317,19 @@ clearButton.addEventListener("click", clearOutput);
 const closeModalButton = document.getElementById("close-modal");
 closeModalButton.addEventListener("click", closeModal);
 
+/*
+// close modal with esc key
 document.addEventListener("keydown", (e) => {
     if (modalBackdrop.classList.contains("is-visible"))
-        console.log(e);
+        // console.log(e);
+        if (e.key == "Escape") {
+            closeModal();
+        }
     else
         console.log("modal hidden currently.");
 });
-
+*/
+// TODO: unwire; removing the button
 const testModalButton = document.getElementById("test-modal");
 testModalButton.addEventListener("click", openModal);
 
