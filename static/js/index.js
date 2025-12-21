@@ -211,7 +211,7 @@ const getSavedDeckTitles = () => {
 
 const getDecklistsInDOM = () => {
     let deckNames = [];
-    const decksTable = document.getElementById("decklists");
+    const allDecks = document.getElementById("decklists");
     for (var i = 0; i < allDecks.children.length; i++) {
         //tr
         if (allDecks.children[i].children.length > 0) {
@@ -278,35 +278,52 @@ const updateDecklistTable = () => {
 const submitDeck = () => {
     let result = {
         "status": "",
-        "code": 0,
+        "code": "",
         "message": ""
     };
 
     // validate deck title non-empty, and not duplicate
     let modalElements = getModalElements();
+    console.log("Checking that we're getting valid modal elements: ", modalElements);
     const deckTitles = getSavedDeckTitles();
-    let newDeckTitle = modalElements["title"].innerText;
+    // CARE: `.value` liable to change based on HTML updates (e.g. not using input anymore)
+    let newDeckTitle = modalElements["title"].value;
     if (newDeckTitle == "") {
         result.status = "fail";
-        result.code = 1;
+        result.code = "empty_name";
         result.message = "Empty name is not supported for decklists. Please provide a name for the decklist.";
+        console.log(result);
+        return;
     }
 
 
-    let newDecklist = parseDecklist(modalElements["decklist"]);
-
-    if (!deckTitles.includes(newDeckTitle)) {
-        // add the new deck to the runtime list
-        saveDeck(newDeckTitle, newDecklist);
-        closeModal();
-        result.status = "success";
-    } else {
+    let newDecklist = parseDecklist(modalElements["decklist"].value);
+    let validCheck = validateDecklist(newDecklist);
+    
+    if (validCheck.isValid != true) {
         result.status = "fail";
-        result.code = 2;
-        result.message = `${newDeckTitle} conflicts with another deck in saved decklists. Please use unique deck names.`;
+        result.code = "invalid_decklist";
+        result.message = validCheck.message;
+        console.log(result);
+        return;
     }
 
-    return result;
+    if (deckTitles.includes(newDeckTitle)) {
+        result.status = "fail";
+        result.code = "name_conflict";
+        result.message = `${newDeckTitle} conflicts with another deck in saved decklists. Please use unique deck names.`;
+        console.log(result);
+        return;
+    }
+
+    // add the new deck to the runtime list
+    saveDeck(newDeckTitle, newDecklist);
+    closeModal();
+    updateDecklistTable();
+    result.status = "success";
+
+    console.log(result);
+    return;
 }
 
 const clearOutput = () => {
@@ -345,6 +362,9 @@ showDecks.addEventListener("click", ()=>{logOutput(JSON.stringify(decklists, und
 
 const clearButton = document.getElementById("clear-output");
 clearButton.addEventListener("click", clearOutput);
+
+const saveModalButton = document.getElementById("save-new-deck");
+saveModalButton.addEventListener("click", submitDeck);
 
 const closeModalButton = document.getElementById("close-modal");
 closeModalButton.addEventListener("click", closeModal);
