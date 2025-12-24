@@ -10,14 +10,18 @@
 
 <body>
     <div id="app">
+        <!-- #tag_modal_start -->
         <div id="modal-backdrop" class="modal-backdrop"></div>
+        <!-- #tag_modal_end -->
         <div id="panes-container">
+            <!-- #tag_decklists_start -->
             <span id="decklists-pane">
                 <span id="pane-title">Deck Inventory</span>
                 <button type="button" id="create-new">New</button>
                 <table id="decklists">
                 </table>
             </span>
+            <!-- #tag_decklists_end -->
 
             <div id="output-container">
                 <span id="output"></span>
@@ -41,7 +45,7 @@
 
 </html>
 
-
+<!-- #tag_modal_start -->
 <template id="modal-template">
         
             <div id="new-deck-modal" class="modal">
@@ -61,3 +65,4 @@
             </div>
         
 </template>
+<!-- #tag_modal_end -->

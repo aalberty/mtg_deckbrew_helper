@@ -1,4 +1,4 @@
-let decklists = [];
+// #tag_decklists_start
 /**
  * [
  *  {
@@ -7,6 +7,8 @@ let decklists = [];
  *  },
  * ]
  */
+let decklists = [];
+// #tag_decklists_end
 
 const output = document.getElementById("output");
 var outputContent = "";
@@ -22,6 +24,8 @@ const logOutput = (msg) => {
     return;
 }
 
+
+// #tag_decklists_start
 const parseDecklist = (raw) => {
     let rawLines = raw.split("\n");
     let decklist = [];
@@ -92,6 +96,8 @@ const getTargetDecks = () => {
 
     return targetDecks;
 }
+
+// #tag_decklists_end
 
 const analyze = () => {
     let targetDecks = getTargetDecks();
@@ -183,6 +189,7 @@ Cards common across all provided decklists: \n${JSON.stringify(common, undefined
     logOutput(results);
 }
 
+// #tag_decklists_start
 const saveDeck = (name, decklist) => {
     decklists.push({
         "name": name,
@@ -192,12 +199,14 @@ const saveDeck = (name, decklist) => {
 }
 
 
+// #tag_modal_start
 const getModalElements = () => {
     let modalElements = {};
     modalElements['title'] = document.getElementById("deck-name-input");
     modalElements['decklist'] = document.getElementById("modal-decklist-input");
     return modalElements;
 }
+// #tag_modal_end
 
 const getSavedDeckTitles = () => {
     let deckTitles = [];
@@ -275,6 +284,7 @@ const updateDecklistTable = () => {
 
 
 
+// #tag_modal_start
 const submitDeck = () => {
     let result = {
         "status": "",
@@ -325,6 +335,9 @@ const submitDeck = () => {
     console.log(result);
     return;
 }
+// #tag_decklists_end
+
+// #tag_modal_end
 
 const clearOutput = () => {
     output.innerText = "";
@@ -332,6 +345,7 @@ const clearOutput = () => {
     return;
 }
 
+// #tag_modal_start
 const closeModal = () => {
     const modalBackdrop = document.getElementById("modal-backdrop");
     const newDeckModal = document.getElementById("new-deck-modal");
@@ -350,24 +364,29 @@ const modalTemplate = document.getElementById("modal-template");
 const modalBackdrop = document.getElementById("modal-backdrop");
 const modal = modalTemplate.content.cloneNode(true);
 modalBackdrop.appendChild(modal);
+// #tag_modal_end
 
 const analyzeButton = document.getElementById("run-analysis");
 analyzeButton.addEventListener("click", analyze);
 
+// #tag_decklists_start
 const newDeckButton = document.getElementById("create-new");
 newDeckButton.addEventListener("click", openModal);
 
 const showDecks = document.getElementById("show-decklists");
 showDecks.addEventListener("click", ()=>{logOutput(JSON.stringify(decklists, undefined, 4))});
+// #tag_decklists_end
 
 const clearButton = document.getElementById("clear-output");
 clearButton.addEventListener("click", clearOutput);
 
+// #tag_modal_start
 const saveModalButton = document.getElementById("save-new-deck");
 saveModalButton.addEventListener("click", submitDeck);
 
 const closeModalButton = document.getElementById("close-modal");
 closeModalButton.addEventListener("click", closeModal);
+// #tag_modal_end
 
 /**
  * TODO: `rewire`; save button on the modal should:

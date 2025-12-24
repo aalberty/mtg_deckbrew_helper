@@ -140,6 +140,7 @@ tr {
     max-height: 50vh;
 }
 
+/* #tag_modal_start */
 .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -182,15 +183,6 @@ tr {
     flex-flow: column;
 }
 
-#deck-name-container {
-    margin-bottom: 1vh;
-}
-
-#deck-name-input {
-    border: 1px solid var(--dark-border);
-    border-radius: 5px;
-}
-
 #modal-controls-container {
     display: flex;
     flex-flow: row;
@@ -209,4 +201,15 @@ tr {
     margin: auto;
     margin-top: 1vh;
     margin-bottom: 1vh;
+}
+
+/* #tag_modal_end */
+
+#deck-name-container {
+    margin-bottom: 1vh;
+}
+
+#deck-name-input {
+    border: 1px solid var(--dark-border);
+    border-radius: 5px;
 }
